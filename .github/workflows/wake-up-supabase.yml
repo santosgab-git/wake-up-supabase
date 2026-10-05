@@ -46,7 +46,7 @@ jobs:
                   continue
 
               # Target Auth Health endpoint which reliably responds HTTP 200 across all key types
-              target_url = f"{url}/auth/v1/health"
+              target_url = f"{url}/rest/v1/"
               print(f"🌐 Pinging Database: {display_name}")
 
               req = urllib.request.Request(
