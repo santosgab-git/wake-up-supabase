@@ -45,7 +45,7 @@ jobs:
                   has_error = True
                   continue
 
-              target_url = f"{url}/rest/v1/"
+              target_url = f"{url}/rest/v1/kpi_mortalidad_actividad?select=id&limit=1"
               print(f"🌐 Pinging Database: {display_name}")
 
               req = urllib.request.Request(
