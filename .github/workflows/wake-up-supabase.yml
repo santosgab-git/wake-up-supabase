@@ -2,8 +2,8 @@ name: Wake Up Supabase
 
 on:
   schedule:
-    - cron: "0 6 * * *"   # Runs automatically every day at 06:00 UTC
-  workflow_dispatch:       # Allows manual trigger
+    - cron: "0 6 * * *"   # Se ejecuta diariamente a las 06:00 UTC
+  workflow_dispatch:       # Permite ejecución manual
 
 jobs:
   ping-projects:
@@ -45,7 +45,6 @@ jobs:
                   has_error = True
                   continue
 
-              # Target Auth Health endpoint which reliably responds HTTP 200 across all key types
               target_url = f"{url}/rest/v1/"
               print(f"🌐 Pinging Database: {display_name}")
 
@@ -53,7 +52,8 @@ jobs:
                   target_url,
                   headers={
                       "apikey": key,
-                      "Authorization": f"Bearer {key}"
+                      "Authorization": f"Bearer {key}",
+                      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
                   }
               )
 
@@ -62,12 +62,9 @@ jobs:
                       code = response.getcode()
                       print(f"✅ {display_name} responded with HTTP {code} — project is active!\n")
               except urllib.error.HTTPError as e:
-                  if e.code in (200, 204):
-                      print(f"✅ {display_name} responded with HTTP {e.code} — project is active!\n")
-                  else:
-                      print(f"❌ {display_name} FAILED with HTTP {e.code}: {e.reason}")
-                      print(f"   Check your URL and API Key for this project.\n")
-                      has_error = True
+                  print(f"❌ {display_name} FAILED with HTTP {e.code}: {e.reason}")
+                  print(f"   Check your URL and API Key for this project.\n")
+                  has_error = True
               except Exception as e:
                   print(f"❌ Connection error for {display_name}: {e}\n")
                   has_error = True
